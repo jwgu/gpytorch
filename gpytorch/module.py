@@ -160,7 +160,8 @@ class Module(nn.Module):
     def _set_conditioning_flag(self, mode=True):
         self.conditioning = mode
         for module in self.children():
-            module._set_conditioning_flag(mode)
+            if isinstance(module, Module):
+                module._set_conditioning_flag(mode)
 
     def condition(self, train_inputs, train_target=None, **kwargs):
         """
@@ -211,7 +212,8 @@ class Module(nn.Module):
             self.register_buffer('inducing_points', inducing_points)
 
         for module in self.children():
-            module._set_interpolation_grid(grid, inducing_points, grid_size, grid_bounds)
+            if isinstance(module, Module):
+                module._set_interpolation_grid(grid, inducing_points, grid_size, grid_bounds)
 
     def initialize_interpolation_grid(self, grid_size, grid_bounds):
         grid = torch.zeros(len(grid_bounds), grid_size)
