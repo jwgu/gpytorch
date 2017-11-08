@@ -5,7 +5,10 @@ from .likelihood import Likelihood
 import numpy as np
 
 class SoftmaxLikelihood(Likelihood):
-    
+ 
+    def log_prob(self, f, A, y):
+        return np.log(self.p_y_given_f_A(f, A, y))
+   
     def p_y_given_f_A(self, f, A, y):
         f_vec = f.mean()
         numerator = np.exp(A.dot(f_vec.transpose()).dot(y)
